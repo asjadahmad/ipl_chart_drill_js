@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <title>highest dismisal of each batsman by a bowler</title>
+  </head>
+  <body>
+    <div id="chart-container" style="width: 100vw; height: 100vh"></div>
+    <script>
+      // Your data
+      fetch("http://localhost:9000/output/highest_no_of_dismissal.json")
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          createChart(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+
+      function createChart(data) {
+        // Create the Highcharts chart
+        const seriesData = Object.entries(data).reduce((acc, cv) => {
+          let bowlerData = Object.entries(cv[1]);
+          let stringKey = cv[0] + " by " + bowlerData[0][0];
+          acc[stringKey] = bowlerData[0][1];
+
+          return acc;
+        }, {});
+
+        Highcharts.chart("chart-container", {
+          chart: {
+            type: "column",
+          },
+          title: {
+            text: "highest dismisal of each batsman by a bowler",
+          },
+          xAxis: {
+            categories: Object.keys(seriesData),
+            title: {
+              text: "batsman Bowler Duo",
+            },
+          },
+          yAxis: {
+            title: {
+              text: "number of wickets",
+            },
+          },
+          series: [
+            {
+              name: "batsman dismissed by a bowler",
+              data: Object.values(seriesData),
+            },
+          ],
+        });
+      }
+    </script>
+  </body>
+</html>

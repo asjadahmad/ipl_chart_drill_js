@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <title>matches per year</title>
+  </head>
+  <body>
+    <div id="chart-container" style="width: 100vw; height: 100vh;"></div> 
+    <script>
+
+      // Your data
+      fetch("http://localhost:9000/output/matches_per_year.json")
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          createChart(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+       
+        function createChart(data) {
+            // Create the Highcharts chart
+            Highcharts.chart('chart-container', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Matches Per Year'
+                },
+                xAxis: {
+                    categories: Object.keys(data),
+                    title: {
+                        text: 'Year'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Number of Matches'
+                    }
+                },
+                series: [{
+                    name: 'Matches Played',
+                    data: Object.values(data)
+                }]
+            });
+        }
+
+
+
+        
+    </script>
+  </body>
+</html>

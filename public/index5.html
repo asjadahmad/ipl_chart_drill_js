@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <title>strikerate of each batsman each year</title>
+  </head>
+  <body>
+    <div id="chart-container" style="width: 150vw; height: 100vh"></div>
+    <script>
+      // Your data
+      fetch("http://localhost:9000/output/highest_strike_rate.json")
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          createChart(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+
+      function createChart(data) {
+        // Create the Highcharts chart
+
+        const seriesData = Object.entries(data).map(([batsman, data]) => ({
+                name: batsman,
+                data: Object.entries(data).map(([year, strikeRate]) => ({ x: parseInt(year), y: strikeRate }))
+
+            }));
+        console.log(seriesData);
+            Highcharts.chart('chart-container', {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: 'Strike Rate of a batsman each year'
+                },
+                xAxis: {
+                    title: {
+                        text: 'Year'
+                    },
+                },
+                yAxis: {
+                    title: {
+                        text: 'name of the player'
+                    }
+                },
+                series: seriesData
+            });
+
+      }
+    </script>
+  </body>
+</html>
+
+

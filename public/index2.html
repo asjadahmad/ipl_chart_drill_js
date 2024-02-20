@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <title>matches won per year per  team</title>
+  </head>
+  <body>
+    <div id="chart-container" style="width: 100vw; height: 100vh"></div>
+    <script>
+      // Your data
+      fetch("http://localhost:9000/output/matches_won_per_team.json")
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          createChart(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+
+      function createChart(data) {
+        // Create the Highcharts chart
+
+        const seriesData = Object.entries(data).map(([team, data]) => ({
+                name: team,
+                data: Object.entries(data).map(([year, value]) => ({ x: parseInt(year), y: value }))
+
+            }));
+        console.log(seriesData);
+            Highcharts.chart('chart-container', {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: 'Matches Won Per Team Per Year'
+                },
+                xAxis: {
+                    title: {
+                        text: 'Year'
+                    },
+                },
+                yAxis: {
+                    title: {
+                        text: 'Number of Matches'
+                    }
+                },
+                series: seriesData
+            });
+
+      }
+    </script>
+  </body>
+</html>
+
+

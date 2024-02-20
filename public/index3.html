@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <title>Extra runs conceded by each team in 2016</title>
+  </head>
+  <body>
+    <div id="chart-container" style="width: 100vw; height: 100vh;"></div> 
+    <script>
+
+      // Your data
+      fetch("http://localhost:9000/output/extra_runs_conceded.json")
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          createChart(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+       
+        function createChart(data) {
+            // Create the Highcharts chart
+            Highcharts.chart('chart-container', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'extra conceded per team'
+                },
+                xAxis: {
+                    categories: Object.keys(data),
+                    title: {
+                        text: 'team'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'runs'
+                    }
+                },
+                series: [{
+                    name: 'Extra runs',
+                    data: Object.values(data)
+                }]
+            });
+        }
+
+
+
+        
+    </script>
+  </body>
+</html>
